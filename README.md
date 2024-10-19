@@ -44,9 +44,9 @@
 2. **SMake sure to use only these numbers as we are in test mode:**
 
     ```bash
-   Phone number	    Verification code	
-   +91 84778 12100	123456	
-   +91 94583 51125	313131
+   Phone number	 Verification code	
+   +91 8477812100	123456	
+   +91 9458351125	313131
     ```
 
 Thanks
