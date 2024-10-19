@@ -25,7 +25,7 @@
 2. **Add these to the `.env` file**. Example format:
 
     ```env
-    VITE_API_BACKEND_URI=https://cuvette-backend-lqh9.onrender.com
+    VITE_API_BACKEND_URI=http://localhost:5000
     VITE_API_apiKey="AIzaSyDIsvlunubcaZ22OGciJdFmP0oIC8X09LE"
     VITE_API_authDomain= "uvcc-2af7c.firebaseapp.com"
     VITE_API_projectId= "uvcc-2af7c"
