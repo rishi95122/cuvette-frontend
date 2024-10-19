@@ -1,19 +1,23 @@
-import React, { useState } from 'react';
+import  { useContext, useState } from 'react';
 import axios from 'axios';
 import { User, Phone, Building, Mail, Users, Loader } from "lucide-react";
+import { AuthContext } from '../../context/AuthContext';
+import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import { auth } from '../../firebase';
 
-function SignupForm({ setStep, formData, setFormData }) {
+function SignupForm({ setStep, formData, setFormData ,setFirebaseResponse}) {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [fieldErrors, setFieldErrors] = useState({}); // State to track field-specific errors
+  const [fieldErrors, setFieldErrors] = useState({}); 
 
+  const {setUpRecaptcha}=useContext(AuthContext)
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
-    setFieldErrors({ ...fieldErrors, [e.target.name]: null }); // Clear field-specific error when input changes
+    setFieldErrors({ ...fieldErrors, [e.target.name]: null }); 
   };
 
   const validateFields = () => {
@@ -53,13 +57,21 @@ function SignupForm({ setStep, formData, setFormData }) {
     }
 
     try {
+     const appVerifier=new RecaptchaVerifier(auth,'recaptcha-container',{
+      size:"invisible"
+     })
+   const response2=await  signInWithPhoneNumber(auth,`+91${formData.phone}`,appVerifier)
+
+      setFirebaseResponse(response2)
+   
       const response = await axios.post(`${import.meta.env.VITE_API_BACKEND_URI}/api/auth/send-otp`, formData);
-      if (response.status === 200) {
+      if (response.status === 200 && response2) {
         setStep(2);
         setError(null);
         setSuccess("OTP sent successfully!");
       }
     } catch (err) {
+      console.log(err)
       setError(err.response?.data?.message || "An error occurred");
       setSuccess(null);
     }
@@ -69,7 +81,7 @@ function SignupForm({ setStep, formData, setFormData }) {
   return (
     <div className="min-h-screen bg-white">
       <main className="flex flex-col md:flex-row max-w-7xl mx-auto mt-10 p-4">
-        <div className="md:w-1/2 pr-8 mb-8 md:mb-0">
+        <div className="md:w-1/2 pr-8 mb-8 md:mb-0  flex items-center">
           <p className="text-gray-600">
             Lorem Ipsum is simply dummy text of the printing and typesetting industry.
             Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
@@ -155,7 +167,7 @@ function SignupForm({ setStep, formData, setFormData }) {
                   Terms & Conditions
                 </a>
               </p>
-
+              <div id="recaptcha-container"></div>
               <button
                 type="submit"
                 className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"

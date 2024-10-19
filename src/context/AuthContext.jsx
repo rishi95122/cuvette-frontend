@@ -1,7 +1,8 @@
 import React, { createContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
-
+import {auth} from '../firebase'
+import { RecaptchaVerifier } from "firebase/auth";
 export const AuthContext = createContext();
 
 const AuthContextProvider = ({ children }) => {
@@ -44,7 +45,14 @@ const AuthContextProvider = ({ children }) => {
     localStorage.removeItem("token");
 
   };
-
+  function setUpRecaptcha(number){
+    const recaptchaVerifier =new RecaptchaVerifier(
+      "recaptcha-container",
+      {},
+      auth
+    )
+    recaptchaVerifier.render()
+  }
  
   useEffect(() => {
     if (authToken) {
@@ -52,7 +60,7 @@ const AuthContextProvider = ({ children }) => {
     }
   }, []);
   return (
-    <AuthContext.Provider value={{ setUser, user, authToken,setAuthToken }}>
+    <AuthContext.Provider value={{ setUser, user,setUpRecaptcha, authToken,setAuthToken }}>
       {children}
     </AuthContext.Provider>
   );

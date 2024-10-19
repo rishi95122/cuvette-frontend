@@ -5,6 +5,7 @@ import SignupForm from "../components/signup/SignupForm";
 import Otpverification from "../components/signup/Otpverification";
 function Signup() {
   const [step, setStep] = useState(1);
+  const [firebaseResponse,setFirebaseResponse]=useState()
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -21,9 +22,10 @@ function Signup() {
           setFormData={setFormData}
           formData={formData}
           setStep={setStep}
+          setFirebaseResponse={setFirebaseResponse}
         />
       ) : (
-        <Otpverification formData={formData} setStep={setStep} />
+        <Otpverification firebaseResponse={firebaseResponse} formData={formData} setStep={setStep} />
       )}
     </>
   );

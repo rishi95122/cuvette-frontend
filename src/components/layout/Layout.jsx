@@ -24,7 +24,7 @@ const Layout = ({ children }) => {
     <div className="flex h-screen">
  
       <button
-        className="md:hidden fixed top-4 left-4 z-20 p-2 rounded-md bg-gray-100 text-gray-600"
+        className="md:hidden fixed top-3 left-4 z-20 p-2 rounded-md bg-gray-100 text-gray-600"
         onClick={toggleSidebar}
        
       >
@@ -59,7 +59,7 @@ const Layout = ({ children }) => {
       </aside>
 
    
-      <div className="flex-1 p-8 md:ml-20">
+      <div className="flex-1 p-8 ">
         <main>{children}</main>
       </div>
 

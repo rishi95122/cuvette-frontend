@@ -77,7 +77,7 @@ const AddJob = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 ">
       <form className="max-w-2xl mx-auto space-y-6 bg-white p-8 rounded-lg shadow" onSubmit={handleSubmit}>
         <div>
           <label
@@ -152,7 +152,7 @@ const AddJob = () => {
                 {formData.candidates.map((mail, idx) => (
                   <span
                     key={idx}
-                    className="inline-flex items-center bg-gray-100 px-2 py-1 rounded-md text-sm text-gray-600"
+                    className="inline-flex items-center bg-gray-100 px-2 py-1 rounded-md text-xs text-gray-600"
                   >
                     {mail}
                     <button

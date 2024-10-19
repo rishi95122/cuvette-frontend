@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 
 const useOtpVerification = (formData) => {
     const [isEmailVerified, setIsEmailVerified] = useState(false);
-    const [isMobileVerified, setIsmobileVerified] = useState(true);
+    const [isMobileVerified, setIsmobileVerified] = useState(false);
   
     const handleEmailOtp = async (emailOtp) => {
    
@@ -25,22 +25,12 @@ const useOtpVerification = (formData) => {
           toast.error(error.response.data.message);
         }
       };
-      const handleMobileOtp = async () => {
-        try {
-          const response = await axios.post("/api/verifymobile", {
-            otp: 'mobileOtp',
-          });
-          if (response.data.success) {
-            alert("Mobile verified successfully!");
-          } else {
-            alert("Invalid mobile OTP. Please try again.");
-          }
-        } catch (error) {
-          console.error("Error verifying mobile OTP:", error);
-          toast(
-            "An error occurred while verifying the mobile OTP. Please try again."
-          );
-        }
+      const handleMobileOtp = async (firebaseResponse,mobileOtp) => {
+        console.log(firebaseResponse,mobileOtp)
+        firebaseResponse?.confirm(mobileOtp).then(()=>{
+          toast.success("Mobile otp verified")
+          setIsmobileVerified(true)
+        }).catch((err)=>toast.error("Invalid Otp",err?.error))
       };
   return {isEmailVerified,isMobileVerified,handleMobileOtp,handleEmailOtp}
 }

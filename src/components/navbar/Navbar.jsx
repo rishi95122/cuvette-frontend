@@ -1,13 +1,13 @@
 
 import React, { useContext, useState } from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useLocation} from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import { AuthContext } from "../../context/AuthContext";
 import useLogin from '../../hooks/useLogin';
 
 const Navbar = () => {
   const {user}=useContext(AuthContext)
-
+  const {pathname}=useLocation()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 const {logout}=useLogin()
   const handleLogout = () => {
@@ -20,9 +20,11 @@ const {logout}=useLogin()
   }
 
   return (
-    <header className="flex justify-between items-center p-4 max-w-7xl mx-auto h-16 bg-white shadow-sm">
-      <div className="text-2xl font-bold max-lg:ml-14">
-        C<span className="text-blue-600">u</span>vette
+    <header className="flex justify-between border items-center p-4  mx-auto h-16 bg-white shadow-sm">
+      <div className={`text-2xl font-bold ${pathname!=='/login' && pathname!=='/signup' &&  'max-md:ml-14'}`}>
+        <Link to="/">
+
+        C<span className="text-blue-600">u</span>vette        </Link>
       </div>
       
       <nav className="hidden md:flex items-center space-x-4">
@@ -48,8 +50,8 @@ const {logout}=useLogin()
           <nav className="flex flex-col space-y-4 p-4">
             {!user ? (
               <>
-                <Link to="/login" className="text-gray-600 px-4 py-2 rounded text-center border hover:text-gray-900">Login</Link>
-                <Link to="/signup" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-center">Sign Up</Link>
+                <Link to="/login" onClick={toggleMenu} className="text-gray-600 px-4 py-2 rounded text-center border hover:text-gray-900">Login</Link>
+                <Link to="/signup" onClick={toggleMenu} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-center">Sign Up</Link>
               </>
             ) : (
               <button onClick={handleLogout} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-center">Logout</button>

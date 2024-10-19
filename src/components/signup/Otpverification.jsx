@@ -5,11 +5,12 @@ import toast from "react-hot-toast";
 
 import useOtpVerification from "../../hooks/useOtpVerification";
 import { useNavigate } from "react-router-dom";
-const Otpverification = ({ formData }) => {
+const Otpverification = ({ formData ,firebaseResponse}) => {
   const [emailOtp, setEmailOtp] = useState("");
   const [mobileOtp, setMobileOtp] = useState("");
+
 const nav=useNavigate()
- const {handleEmailOtp,isEmailVerified,isMobileVerified}=useOtpVerification(formData)
+ const {handleEmailOtp,isEmailVerified,isMobileVerified,handleMobileOtp}=useOtpVerification(formData)
 
   const handleRegister=async()=>{
     try {
@@ -82,8 +83,8 @@ const nav=useNavigate()
                   type="text"
                   placeholder="Mobile OTP"
                   onChange={(e) => setMobileOtp(e.target.value)}
-                  disabled
-                  className="w-full cursor-not-allowed pl-10 pr-3 py-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  disabled={isMobileVerified}
+                  className="w-full  pl-10 pr-3 py-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   aria-label="Mobile OTP"
                 />
                 {isMobileVerified && (
@@ -96,9 +97,9 @@ const nav=useNavigate()
               {!isMobileVerified && (
                 <button
                   type="button"
-                  // onClick={handleMobileOtp}
+                  onClick={()=>handleMobileOtp(firebaseResponse,mobileOtp)}
 
-                  className="w-full cursor-not-allowed py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75"
+                  className="w-full  py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75"
                 >
                   Verify Mobile
                 </button>

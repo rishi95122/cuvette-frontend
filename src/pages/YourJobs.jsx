@@ -2,19 +2,15 @@ import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import JobCard from '../components/jobcard/JobCard'
 import { AuthContext } from '../context/AuthContext'
-import {useNavigate} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import toast from 'react-hot-toast'
 
 function YourJobs() {
   const { user, authToken } = useContext(AuthContext)
   const [data, setData] = useState([])
-  const nav=useNavigate()
+
   console.log(user)
-  if(!user)
-  {
-    nav("/login")
-    return;
-  }
+
   const getJobs = async () => {
     try {
       if (user) {
@@ -25,19 +21,23 @@ function YourJobs() {
         setData(response.data)
       }
     } catch (error) {
+      console.log(error)
       toast.error(error.response?.data?.error || 'An error occurred while fetching jobs.')
     }
   }
 
   useEffect(() => {
-    if(user)
+   
     getJobs()
   }, [user])
-
+    if(!user)
+      return <div className='text-blue-400 font-bold'>please <Link to="/" className='underline'>login</Link> to view jobs.</div>
+    if(user && data.length==0)
+      return <div className='text-blue-400 font-bold'>No jobs found!</div>
   return (
-    <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 rounded-xl lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-extrabold text-gray-900 text-center mb-10">
+        <h1 className="text-2xl font-extrabold text-blue-400 text-center mb-10">
           Jobs posted by you
         </h1>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
