@@ -31,7 +31,7 @@ function YourJobs() {
     getJobs()
   }, [user])
     if(!user)
-      return <div className='text-blue-400 font-bold'>please <Link to="/" className='underline'>login</Link> to view jobs.</div>
+      return <div className='text-blue-400 font-bold'>please <Link to="/login" className='underline'>login</Link> to view jobs.</div>
     if(user && data.length==0)
       return <div className='text-blue-400 font-bold'>No jobs found!</div>
   return (
