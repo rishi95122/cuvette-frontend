@@ -12,11 +12,15 @@ import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 
 function App() {
-const {user}=useContext(AuthContext)
+  const { user } = useContext(AuthContext);
   const routes = [
     { path: "/signup", element: <Signup />, layout: false },
     { path: "/login", element: <Login />, layout: false },
-    { path: "/addjob", element: user ? <Addjob />:<Navigate to="/login"/>, layout: true },
+    {
+      path: "/addjob",
+      element: user ? <Addjob /> : <Navigate to="/login" />,
+      layout: true,
+    },
     { path: "/", element: <Home />, layout: true },
     { path: "/jobs", element: <YourJobs />, layout: true },
   ];
@@ -30,11 +34,7 @@ const {user}=useContext(AuthContext)
             key={index}
             path={route.path}
             element={
-              route.layout ? (
-                <Layout>{route.element}</Layout>
-              ) : (
-                route.element
-              )
+              route.layout ? <Layout>{route.element}</Layout> : route.element
             }
           />
         ))}

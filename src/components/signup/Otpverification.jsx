@@ -1,30 +1,33 @@
-import  { useState } from "react";
-import {  CheckCircle2, Mail, Phone } from "lucide-react";
+import React, { useState } from "react";
+import { CheckCircle2, Mail, Phone } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
 import useOtpVerification from "../../hooks/useOtpVerification";
 import { useNavigate } from "react-router-dom";
-const Otpverification = ({ formData ,firebaseResponse}) => {
+import { Tooltip, Typography } from "@mui/material";
+const Otpverification = ({ formData, firebaseResponse }) => {
   const [emailOtp, setEmailOtp] = useState("");
   const [mobileOtp, setMobileOtp] = useState("");
 
-const nav=useNavigate()
- const {handleEmailOtp,isEmailVerified,isMobileVerified,handleMobileOtp}=useOtpVerification(formData)
+  const nav = useNavigate();
+  const { handleEmailOtp, isEmailVerified, isMobileVerified, handleMobileOtp } =
+    useOtpVerification(formData);
 
-  const handleRegister=async()=>{
+  const handleRegister = async () => {
     try {
-      const response= await axios.post(`${import.meta.env.VITE_API_BACKEND_URI}/api/auth/signup`,formData)
-        if(response.status===200)
-          toast.success("Registered Successfully")
-            nav("/login")
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BACKEND_URI}/api/auth/signup`,
+        formData
+      );
+      if (response.status === 200) toast.success("Registered Successfully");
+      nav("/login");
     } catch (error) {
-      toast.error(error.response.data.error)
+      toast.error(error.response.data.error);
     }
-  }
-  if(isEmailVerified&&isMobileVerified)
-  {
-   handleRegister()
+  };
+  if (isEmailVerified && isMobileVerified) {
+    handleRegister();
   }
   return (
     <div className="min-h-screen bg-gray-50">
@@ -67,38 +70,55 @@ const nav=useNavigate()
               {!isEmailVerified && (
                 <button
                   type="button"
-                  onClick={()=>handleEmailOtp(emailOtp)}
+                  onClick={() => handleEmailOtp(emailOtp)}
                   className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75"
                 >
                   Verify Email
                 </button>
               )}
-
-              <div className="relative">
-                <Phone
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                  size={20}
-                />
-                <input
-                  type="text"
-                  placeholder="Mobile OTP"
-                  onChange={(e) => setMobileOtp(e.target.value)}
-                  disabled={isMobileVerified}
-                  className="w-full  pl-10 pr-3 py-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  aria-label="Mobile OTP"
-                />
-                {isMobileVerified && (
-                  <CheckCircle2
-                    className="absolute  right-3 top-1/2 transform -translate-y-1/2 text-green-500"
+              <Tooltip
+                title={
+                  <React.Fragment>
+                    <Typography color="inherit">
+                      Use only these otps for given numbers
+                    </Typography>
+                    <em>
+                      8477812100 - <b>123456</b>
+                      <br></br>
+                    </em>
+                    <em>
+                      9458351125 - <b>313131</b>
+                    </em>
+                  </React.Fragment>
+                }
+                placement="left"
+              >
+                <div className="relative">
+                  <Phone
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
                     size={20}
                   />
-                )}
-              </div>
+                  <input
+                    type="text"
+                    placeholder="Mobile OTP"
+                    onChange={(e) => setMobileOtp(e.target.value)}
+                    disabled={isMobileVerified}
+                    className="w-full  pl-10 pr-3 py-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    aria-label="Mobile OTP"
+                  />
+                  {isMobileVerified && (
+                    <CheckCircle2
+                      className="absolute  right-3 top-1/2 transform -translate-y-1/2 text-green-500"
+                      size={20}
+                    />
+                  )}
+                </div>
+              </Tooltip>
+
               {!isMobileVerified && (
                 <button
                   type="button"
-                  onClick={()=>handleMobileOtp(firebaseResponse,mobileOtp)}
-
+                  onClick={() => handleMobileOtp(firebaseResponse, mobileOtp)}
                   className="w-full  py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75"
                 >
                   Verify Mobile

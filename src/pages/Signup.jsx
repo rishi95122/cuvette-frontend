@@ -1,11 +1,10 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { User, Phone, Building, Mail, Users } from "lucide-react";
+import { useState } from "react";
+
 import SignupForm from "../components/signup/SignupForm";
 import Otpverification from "../components/signup/Otpverification";
 function Signup() {
   const [step, setStep] = useState(1);
-  const [firebaseResponse,setFirebaseResponse]=useState()
+  const [firebaseResponse, setFirebaseResponse] = useState();
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -14,7 +13,7 @@ function Signup() {
     employeeSize: "",
   });
 
-  console.log(formData,step)
+  console.log(formData, step);
   return (
     <>
       {step === 1 ? (
@@ -25,7 +24,11 @@ function Signup() {
           setFirebaseResponse={setFirebaseResponse}
         />
       ) : (
-        <Otpverification firebaseResponse={firebaseResponse} formData={formData} setStep={setStep} />
+        <Otpverification
+          firebaseResponse={firebaseResponse}
+          formData={formData}
+          setStep={setStep}
+        />
       )}
     </>
   );
