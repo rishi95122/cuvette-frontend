@@ -1,8 +1,45 @@
-# React + Vite
+# How to start the project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+1. **Clone the repository:**
 
-Currently, two official plugins are available:
+    ```bash
+    git clone https://github.com/rishi95122/cuvette-frontend.git
+    ```
+    
+2. **Navigate to the project directory:**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+    ```bash
+    cd cuvette-frontend
+    ```
+    
+3. **Install dependencies:**
+
+    ```bash
+    npm install
+    ```
+
+### Configuration
+
+1. **Create a `.env` file** in the root directory of the project.
+
+2. **Add these to the `.env` file**. Example format:
+
+    ```env
+    VITE_API_BACKEND_URI=https://cuvette-backend-lqh9.onrender.com
+    VITE_API_apiKey="AIzaSyDIsvlunubcaZ22OGciJdFmP0oIC8X09LE"
+    VITE_API_authDomain= "uvcc-2af7c.firebaseapp.com"
+    VITE_API_projectId= "uvcc-2af7c"
+    VITE_API_storageBucket= "uvcc-2af7c.appspot.com"
+    VITE_API_messagingSenderId= "114967738592"
+    VITE_API_appId= "1:114967738592:web:4acd7015c6009f2ffe3885"
+    VITE_API_measurementId= "G-RYSJTVNRH5=
+    ```
+## Running the project
+
+1. **Start the project:**
+
+    ```bash
+    npm run dev
+    ```
+
+Thanks
