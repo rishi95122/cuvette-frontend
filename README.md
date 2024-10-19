@@ -32,7 +32,7 @@
     VITE_API_storageBucket= "uvcc-2af7c.appspot.com"
     VITE_API_messagingSenderId= "114967738592"
     VITE_API_appId= "1:114967738592:web:4acd7015c6009f2ffe3885"
-    VITE_API_measurementId= "G-RYSJTVNRH5=
+    VITE_API_measurementId= "G-RYSJTVNRH5="
     ```
 ## Running the project
 
