@@ -1,61 +1,16 @@
 
 import { useState } from 'react'
 import { Mail, Lock } from 'lucide-react'
-import toast from 'react-hot-toast'
-import axios from 'axios'
+
 import useLogin from '../hooks/useLogin'
 
 export default function Login() {
   const [email, setEmail] = useState('')
   const [otp, setOtp] = useState('')
   const [step, setStep] = useState('email')
-  const [isLoading, setIsLoading] = useState(false)
-  const {login}=useLogin()
-  const handleEmailSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
+  const {loading,handleEmailSubmit,handleOtpSubmit}=useLogin()
 
-    try {
-   
-      const response = await axios.post(`${import.meta.env.VITE_API_BACKEND_URI}/api/auth/send-otp`, {companyEmail:email});
 
-    
-      if (response.status === 200) {
-        toast.success('Otp sent successfully');
-        setStep('otp'); 
-        setIsLoading(false);
-
-      } else {
-        setIsLoading(false);
-        toast.error('Failed to send otp');
-      }
-    } catch (error) {
-      setIsLoading(false);
-
-   toast.error(error.response.data.message)
-    } 
-  };
-
-  const handleOtpSubmit = async (e) => {
-    e.preventDefault();
-  
-    try {
-   
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_BACKEND_URI}/api/auth/verify-otp`,
-        { email: email, otp: otp }
-      );
-      if (response.status === 200) {
-        await login(email)
- 
-      } else {
-        toast.error('OTP verification failed!');
-      }
-    } catch (error) {
-      console.log(error)
-      toast.error('Error verifying OTP! or invalid');
-    } 
-  };
 
   
 
@@ -77,7 +32,7 @@ export default function Login() {
             </div>
             <div>
               {step === 'email' ? (
-                <form onSubmit={handleEmailSubmit} className="space-y-4">
+                <form className="space-y-4">
                   <div className="space-y-2">
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700">Company Email</label>
                     <div className="relative">
@@ -94,15 +49,16 @@ export default function Login() {
                     </div>
                   </div>
                   <button
-                    type="submit"
-                    className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    disabled={isLoading}
+                    type="button"
+                    onClick={()=>handleEmailSubmit(email,setStep)}
+                    className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    disabled={loading}
                   >
-                    {isLoading ? 'Sending OTP...' : 'Send OTP'}
+                    {loading ? 'Sending OTP...' : 'Send OTP'}
                   </button>
                 </form>
               ) : (
-                <form onSubmit={handleOtpSubmit} className="space-y-4">
+                <form  className="space-y-4">
                   <div className="space-y-2">
                     <label htmlFor="otp" className="block text-sm font-medium text-gray-700">One-Time Password</label>
                     <div className="relative">
@@ -119,11 +75,12 @@ export default function Login() {
                     </div>
                   </div>
                   <button
-                    type="submit"
-                    className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    disabled={isLoading}
+                    type="button"
+                    onClick={()=>handleOtpSubmit(email,otp)}
+                    className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    disabled={loading}
                   >
-                    {isLoading ? 'Verifying...' : 'Login'}
+                    {loading||loading ? 'Verifying...' : 'Login'}
                   </button>
                 </form>
               )}

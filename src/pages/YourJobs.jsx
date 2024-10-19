@@ -4,14 +4,14 @@ import JobCard from '../components/jobcard/JobCard'
 import { AuthContext } from '../context/AuthContext'
 import {Link, useNavigate} from 'react-router-dom'
 import toast from 'react-hot-toast'
+import YourjobsSkeltons from '../components/skeltons/YourjobsSkeleton'
 
 function YourJobs() {
   const { user, authToken } = useContext(AuthContext)
   const [data, setData] = useState([])
-
-  console.log(user)
-
+  const [loading,setLoading]=useState(false)
   const getJobs = async () => {
+    setLoading(true)
     try {
       if (user) {
         const headers = {
@@ -19,20 +19,24 @@ function YourJobs() {
         };
         const response = await axios.get(`${import.meta.env.VITE_API_BACKEND_URI}/api/jobs/${user._id}`, { headers })
         setData(response.data)
+        setLoading(false)
       }
     } catch (error) {
       console.log(error)
+      setLoading(false)
       toast.error(error.response?.data?.error || 'An error occurred while fetching jobs.')
     }
   }
 
   useEffect(() => {
-   
     getJobs()
   }, [user])
+
     if(!user)
       return <div className='text-blue-400 font-bold'>please <Link to="/login" className='underline'>login</Link> to view jobs.</div>
-    if(user && data.length==0)
+    if(loading )
+      return   <div className="grid gap-6 md:grid-cols-2 mt-20 lg:grid-cols-3"><YourjobsSkeltons /><YourjobsSkeltons /><YourjobsSkeltons /></div>
+    if(user && data.length===0 && !loading)
       return <div className='text-blue-400 font-bold'>No jobs found!</div>
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 rounded-xl lg:px-8">

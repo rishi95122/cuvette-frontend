@@ -1,84 +1,66 @@
-import React, { useContext, useState } from "react";
-import { ChevronDown, X, Calendar } from "lucide-react";
-import axios from "axios";
-import toast from "react-hot-toast";
-import { AuthContext } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { ChevronDown, X } from "lucide-react";
+
+import useJobs from "../hooks/useJobs";
 
 const AddJob = () => {
-  const {authToken,user}=useContext(AuthContext)
-  const nav=useNavigate()
+
   const [formData, setFormData] = useState({
     jobTitle: "",
     jobDescription: "",
     experienceLevel: "",
-    candidates: ["uditya951@gmail.com", "udityakumar2000@gmail.com"],
+    candidates: [],
     newMail: "",
     endDate: "",
   });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: value,
     }));
   };
-
+  const{handleSubmit}=useJobs()
   const addMail = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      if (formData.newMail && !formData.candidates.includes(formData.newMail)) {
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          candidates: [...prevFormData.candidates, formData.newMail],
-          newMail: "",
+
+      const emails = formData.newMail
+        .split(",")
+        .map((email) => email.trim()) 
+        .filter(
+          (email) =>
+            email && !formData.candidates.includes(email) 
+        );
+
+      if (emails.length > 0) {
+        setFormData((prev) => ({
+          ...prev,
+          candidates: [...prev.candidates, ...emails],
+          newMail: "", 
         }));
       }
     }
   };
 
   const deleteMail = (mailToDelete) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      candidates: prevFormData.candidates.filter((mail) => mail !== mailToDelete),
+    setFormData((prev) => ({
+      ...prev,
+      candidates: prev.candidates.filter(
+        (mail) => mail !== mailToDelete
+      ),
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-
-    const headers = {
-      Authorization: `Bearer ${authToken}`, 
-    };
-
-
-    try {
-      const response = await axios.post(`${ import.meta.env.VITE_API_BACKEND_URI}/api/jobs`, formData,{
-        headers
-      });
-      if(response.status===200)
-      toast.success("Job added successfully");
-
-     
-      setFormData({
-        jobTitle: "",
-        jobDescription: "",
-        experienceLevel: "",
-        candidates: [],
-        newMail: "",
-        endDate: "",
-      });
-
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
+ 
 
   return (
     <div className="min-h-screen bg-gray-50 ">
-      <form className="max-w-2xl mx-auto space-y-6 bg-white p-8 rounded-lg shadow" onSubmit={handleSubmit}>
+      <form
+        className="max-w-2xl mx-auto space-y-6 bg-white p-8 rounded-lg shadow"
+        onSubmit={(e)=>handleSubmit({e,formData,setFormData})}
+      >
         <div>
           <label
             htmlFor="jobTitle"
@@ -128,6 +110,7 @@ const AddJob = () => {
               name="experienceLevel"
               value={formData.experienceLevel}
               onChange={handleInputChange}
+          
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 appearance-none"
               required
             >
@@ -144,7 +127,7 @@ const AddJob = () => {
             htmlFor="addCandidate"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
-            Add Candidate
+            Add Candidates (comma-separated)
           </label>
           <div className="flex items-center space-x-2">
             <div className="flex-1 border border-gray-300 rounded-md shadow-sm px-3 py-2">
@@ -170,7 +153,7 @@ const AddJob = () => {
                 type="email"
                 id="newMail"
                 name="newMail"
-                placeholder="Add more"
+                placeholder="Add multiple emails separated by commas"
                 value={formData.newMail}
                 onChange={handleInputChange}
                 onKeyDown={(e) => e.key === "Enter" && addMail(e)}
@@ -191,13 +174,13 @@ const AddJob = () => {
             <input
               type="date"
               id="endDate"
+              required
               name="endDate"
               value={formData.endDate}
               onChange={handleInputChange}
               placeholder="Select a Date"
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
             />
-          
           </div>
         </div>
         <button

@@ -37,8 +37,46 @@ const useLogin = () => {
       nav("/login")
     } 
   };
+  const handleEmailSubmit = async (email,setStep) => {
+    setLoading(true);
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_API_BACKEND_URI}/api/auth/send-otp`, {companyEmail:email});
+      if (response.status === 200) {
+        toast.success('Otp sent successfully');
+        setStep('otp'); 
+        setLoading(false);
+      } else {
+        setLoading(false);
+        toast.error('Failed to send otp');
+      }
+    } catch (error) {
+      setLoading(false);
 
-
+   toast.error(error.response.data.message)
+    } 
+  };
+  const handleOtpSubmit = async (email,otp) => {
+ 
+    setLoading(true)
+    try {
+   
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BACKEND_URI}/api/auth/verify-otp`,
+        { email: email, otp: otp }
+      );
+      if (response.status === 200) {
+        await login(email)
+        setLoading(false)
+      } else {
+        setLoading(false)
+        toast.error('OTP verification failed!');
+      }
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
+      toast.error('Error verifying OTP! or invalid');
+    } 
+  };
   const logout = () => {
    
     setUser(null);
@@ -52,11 +90,11 @@ const useLogin = () => {
 
   return {
 
-    login,
-    logout,
  
+    logout,
+    handleEmailSubmit,
     loading,
-   
+    handleOtpSubmit
   };
 };
 
